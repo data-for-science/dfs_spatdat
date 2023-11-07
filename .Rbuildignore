@@ -1,2 +1,7 @@
-^dfsspatdat\.Rproj$
+^dfs_spatdat\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
+README.Rmd
+^\.Rproj
+^LICENSE\.md$
+
