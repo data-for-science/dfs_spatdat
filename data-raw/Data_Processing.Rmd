@@ -4,6 +4,20 @@ author: Tyler Hampton
 output: github_document
 ---
 
+## Natural Earth Data
+
+```{r,eval = FALSE}
+utils::download.file(
+  url = "https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places_simple.zip",
+  destfile = "C:/Users/tbhampto/Downloads/ne_10m_populated_places_simple.zip"
+)
+utils::unzip(
+  zipfile = "C:/Users/tbhampto/Downloads/ne_10m_populated_places_simple.zip",
+  exdir = "data-raw/worldcities"
+)
+```
+
+
 ## Canada Census Information
 
 ### Download
