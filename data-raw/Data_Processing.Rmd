@@ -6,6 +6,7 @@ output: github_document
 
 ## Natural Earth Data
 
+### Download 
 ```{r,eval = FALSE}
 utils::download.file(
   url = "https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places_simple.zip",
@@ -16,6 +17,37 @@ utils::unzip(
   exdir = "data-raw/worldcities"
 )
 ```
+
+
+### Final Processing
+
+```{r}
+worldcities = sf::st_read(file.path(
+  "data-raw","worldcities",
+  "ne_10m_populated_places_simple.shp"
+),quiet=TRUE)
+
+worldcities$adm1name = stringi::stri_trans_general(
+  worldcities$adm1name,
+  "latin-ascii"
+)
+
+worldcities = worldcities[,c(
+  "nameascii","featurecla","adm0cap","worldcity",
+  "sov0name","adm0name","adm1name",
+  "sov_a3","adm0_a3","iso_a2",
+  "latitude","longitude",
+  "pop_max","pop_min","geometry"
+)]
+
+plot(st_geometry(worldcities))
+```
+
+```{r, eval=FALSE}
+usethis::use_data(worldcities,overwrite=TRUE)
+usethis::use_r("worldcities")
+```
+
 
 
 ## Canada Census Information
@@ -152,15 +184,74 @@ usethis::use_r("can_cendat")
 ### Download
 
 ```{r, eval = FALSE}
+options(timeout=300)
 utils::download.file(
   url = "http://www.cec.org/files/atlas_layers/1_terrestrial_ecosystems/1_01_1_land_cover_2015_30m/can_land_cover_2015v3_30m_tif.zip",
   destfile = "C:/Users/tbhampto/Downloads/can_land_cover_2015v3_30m_tif.zip"
 )
+utils::unzip(
+  zipfile = "C:/Users/tbhampto/Downloads/can_land_cover_2015v3_30m_tif.zip",
+  exdir = "C:/Users/tbhampto/Downloads"
+)
 ```
 
+```{r, eval = FALSE}
+lc_can = raster::raster(file.path(
+  "C:/Users/tbhampto/Downloads",
+  "can_land_cover_2015v3_30m_tif",
+  "CAN_NALCMS_landcover_2015v3_30m",
+  "data",
+  "CAN_NALCMS_landcover_2015v3_30m.tif"
+))
+crop = sf::st_set_crs(
+  sf::st_as_sf(
+    sf::st_sfc(
+      sf::st_polygon(
+        list(matrix(c(
+          c(-83.5,-83.5,-76,-76,-83.5),
+          c(41.5,45.5,45.5,41.5,41.5)),ncol=2)
+        )
+      )
+    )
+  ),4326
+)
+names(crop) = "geometry"
+sf::st_geometry(crop) <- "geometry"
+crop = sf::st_transform(crop,sf::st_crs(lc_can))
 
+ontario_lc = raster::crop(lc_can,crop)
+
+raster::writeRaster(x = ontario_lc,
+                    file.path(
+  "data-raw","canada_2015_land_cover",
+  "CAN_NALCMS_2015_v2_land_cover_30m",
+  "landcover_SouthernOntario.tif"
+))
+
+```
 
 ### Final Processing
+
+```{r, eval = FALSE}
+ontario_lc_30m = terra::rast(file.path(
+  "data-raw","canada_2015_land_cover",
+  "CAN_NALCMS_2015_v2_land_cover_30m",
+  "landcover_SouthernOntario.tif"
+))
+
+ontario_lc_100m = terra::aggregate(
+  ontario_lc_30m,
+  fact=3,
+  fun=modal,
+  na.rm=TRUE)
+
+raster::writeRaster(x = ontario_lc_100m,
+                    file.path(
+  "data-raw","canada_2015_land_cover",
+  "CAN_NALCMS_2015_v2_land_cover_100m",
+  "landcover_SouthernOntario.tif"
+))
+```
 
 ```{r}
 ontario_lc = raster::raster(file.path(
@@ -172,8 +263,13 @@ ontario_lc = raster::raster(file.path(
 plot(ontario_lc)
 ```
 
+
 ```{r, eval=FALSE}
 usethis::use_data(ontario_lc,overwrite=TRUE)
 usethis::use_r("ontario_lc")
 ```
 
+## Canadian Aboveground Biomass
+
+
+https://ftp.maps.canada.ca/pub/nrcan_rncan/Forests_Foret/canada-forests-attributes_attributs-forests-canada/2011-attributes_attributs-2011/NFI_MODIS250m_2011_kNN_Structure_Biomass_TotalLiveAboveGround_v1.tif
