@@ -14,3 +14,4 @@ Depends:
     raster,
     sf
 LazyData: true
+LazyDataCompression: bzip2
