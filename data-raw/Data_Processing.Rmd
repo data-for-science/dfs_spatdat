@@ -6,6 +6,8 @@ output: github_document
 
 ## Canada Census Information
 
+### Download
+
 [Canada Census Shapefile](https://open.canada.ca/data/en/dataset/5be03a46-8504-40a7-a96c-af195bae0428)
 
 ```{r, eval = FALSE}
@@ -29,6 +31,31 @@ utils::download.file(
 ```
 
 
+### Final Processing
+
+```{r}
+can_cdiv = sf::st_read("data-raw/CanadaCensusShapes/gcd_000e11a_e.shp",quiet=TRUE)
+plot(sf::st_geometry(can_cdiv))
+```
+
+```{r, eval=FALSE}
+usethis::use_data(can_cdiv,overwrite=TRUE)
+usethis::use_r("can_cdiv")
+```
+
+
+```{r}
+can_prov = sf::st_read("data-raw/CanadaCensusShapes/gpr_000e11a_e.shp",quiet=TRUE)
+plot(sf::st_geometry(can_prov))
+```
+
+```{r, eval=FALSE}
+usethis::use_data(can_prov,overwrite=TRUE)
+usethis::use_r("can_prov")
+```
+
+
+
 ## Ontario Land Cover
 
 ### Download
@@ -44,7 +71,7 @@ utils::download.file(
 
 ### Final Processing
 
-```{r, eval = FALSE}
+```{r}
 ontario_lc = raster::raster(file.path(
   "data-raw","canada_2015_land_cover",
   "CAN_NALCMS_2015_v2_land_cover_100m",
