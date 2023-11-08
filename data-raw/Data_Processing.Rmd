@@ -54,7 +54,84 @@ usethis::use_data(can_prov,overwrite=TRUE)
 usethis::use_r("can_prov")
 ```
 
+```{r}
+can_cendat = read.csv("data-raw/CanadaCensusData/CanadaCensusData.csv")
 
+can_cendat = can_cendat[,c(
+  "Geographic.code",
+  "Geographic.name..english",
+  "Geographic.type..english",
+  "Province...territory..english",
+  "Geographic.code..Province...territory",
+  "Population..2016",
+  "Population..2011",
+  "Population....change",
+  "Total.private.dwellings..2016",
+  "Total.private.dwellings..2011",
+  "Total.private.dwellings....change",
+  "Land.area.in.square.kilometres..2016",
+  "Population.density.per.square.kilometre..2016",
+  "National.population.rank..2016",
+  "Provincial.territorial.population.rank..2016"
+)]
+
+names(can_cendat) = c(
+  "CDUID",
+  "CDNAME",
+  "CDTYPE",
+  "PRNAME",
+  "PRUID",
+  "pop.16",
+  "pop.11",
+  "pop.chg",
+  "dwel.16",
+  "dwel.11",
+  "dwel.chg",
+  "landarea.sqkm",
+  "popdens.sqkm",
+  "poprank.nat",
+  "poprank.prov"
+)
+  
+can_cendat$CDNAME = sapply(can_cendat$CDNAME,function(n){
+  if(stringi::stri_enc_isascii(n)){
+    return(n)
+  }else{
+    stringi::stri_trans_general(
+      iconv(n, "latin1", "utf-8"),
+      "latin-ascii")
+    # if(grepl("<",n)){
+    #   position = unlist(gregexpr("<",n, fixed = TRUE))
+    #   char = substr(n,position,position+3)
+    #   sub = paste0("\\u00",substr(char,2,3))
+    #   special = stringi::stri_unescape_unicode("\\u00e9")
+    #   replace = stringi::stri_trans_general(special, "latin-ascii")
+    #   
+    #   fixed = gsub(char,replace,n)
+    # }
+  }
+})
+  
+  
+can_cendat$CDTYPE = factor(can_cendat$CDTYPE,
+                           levels = unique(can_cendat$CDTYPE),
+                           labels = c(
+                             "Census division","County","Territoire equivalent",
+                             "Municipalite regionale de comte",
+                             "United counties","Regional municipality",
+                             "District municipality","District",
+                             "Regional district","Region","Territory",""
+                           )
+                           )
+
+
+head(can_cendat)
+```
+
+```{r, eval=FALSE}
+usethis::use_data(can_cendat,overwrite=TRUE)
+usethis::use_r("can_cendat")
+```
 
 ## Ontario Land Cover
 
