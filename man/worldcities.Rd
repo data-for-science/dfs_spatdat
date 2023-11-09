@@ -15,8 +15,8 @@ An sf simple feature collection of points
 \item Geographic Extent: World
 \item Data attributes:
 \itemize{
-\item nameascii: Unique Identifier
-\item featurecla:
+\item nameascii: Name in ASCII format (special characters removed)
+\item featurecla: Feature Class, describing place
 \item adm0cap: Logical. Capitol of Country (Admin Level-0)
 \item worldcity: Logical. World City
 \item sov0name: Name of Sovereign State (Admin Level-0). See Natural Earth Data for more description

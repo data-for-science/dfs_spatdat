@@ -9,8 +9,8 @@ A RasterLayer
 
 \describe{
 \itemize{
-\item Dimensions: 7005, 6995, 48999975  (nrow, ncol, ncell).
-\item Resolution: 30 meters
+\item Dimensions: 6470, 7677, 49670190  (nrow, ncol, ncell).
+\item Resolution: 90 meters
 \item Projection: Lambert azimuthal equal-area projection
 \item Geographic Extent: Southern Ontario
 \item Data: Land Cover Classification

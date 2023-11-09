@@ -239,24 +239,24 @@ ontario_lc_30m = terra::rast(file.path(
   "landcover_SouthernOntario.tif"
 ))
 
-ontario_lc_100m = terra::aggregate(
+ontario_lc_90m = terra::aggregate(
   ontario_lc_30m,
   fact=3,
   fun=modal,
   na.rm=TRUE)
 
-raster::writeRaster(x = ontario_lc_100m,
+raster::writeRaster(x = ontario_lc_90m,
                     file.path(
   "data-raw","canada_2015_land_cover",
-  "CAN_NALCMS_2015_v2_land_cover_100m",
+  "CAN_NALCMS_2015_v2_land_cover_90m",
   "landcover_SouthernOntario.tif"
-))
+),overwrite=TRUE)
 ```
 
 ```{r}
 ontario_lc = raster::raster(file.path(
   "data-raw","canada_2015_land_cover",
-  "CAN_NALCMS_2015_v2_land_cover_100m",
+  "CAN_NALCMS_2015_v2_land_cover_90m",
   "landcover_SouthernOntario.tif"
 ))
 
