@@ -41,7 +41,7 @@ worldcities = worldcities[,c(
 plot(sf::st_geometry(worldcities))
 ```
 
-![](Data_Processing_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](Data_Processing_files/figure-gfm/worldcities-1.png)<!-- -->
 
 ``` r
 usethis::use_data(worldcities,overwrite=TRUE)
@@ -83,7 +83,7 @@ can_cdiv = sf::st_read("data-raw/CanadaCensusShapes/gcd_000e11a_e.shp",quiet=TRU
 plot(sf::st_geometry(can_cdiv))
 ```
 
-![](Data_Processing_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Data_Processing_files/figure-gfm/can_cdiv-1.png)<!-- -->
 
 ``` r
 usethis::use_data(can_cdiv,overwrite=TRUE)
@@ -95,7 +95,7 @@ can_prov = sf::st_read("data-raw/CanadaCensusShapes/gpr_000e11a_e.shp",quiet=TRU
 plot(sf::st_geometry(can_prov))
 ```
 
-![](Data_Processing_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Data_Processing_files/figure-gfm/can_prov-1.png)<!-- -->
 
 ``` r
 usethis::use_data(can_prov,overwrite=TRUE)
@@ -297,7 +297,7 @@ ontario_lc = raster::raster(file.path(
 raster::plot(ontario_lc)
 ```
 
-![](Data_Processing_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](Data_Processing_files/figure-gfm/ontario_lc-1.png)<!-- -->
 
 ``` r
 usethis::use_data(ontario_lc,overwrite=TRUE)

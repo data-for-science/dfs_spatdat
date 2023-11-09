@@ -21,7 +21,7 @@ utils::unzip(
 
 ### Final Processing
 
-```{r}
+```{r worldcities}
 worldcities = sf::st_read(file.path(
   "data-raw","worldcities",
   "ne_10m_populated_places_simple.shp"
@@ -79,7 +79,7 @@ utils::download.file(
 
 ### Final Processing
 
-```{r}
+```{r can_cdiv}
 can_cdiv = sf::st_read("data-raw/CanadaCensusShapes/gcd_000e11a_e.shp",quiet=TRUE)
 plot(sf::st_geometry(can_cdiv))
 ```
@@ -90,7 +90,7 @@ usethis::use_r("can_cdiv")
 ```
 
 
-```{r}
+```{r can_prov}
 can_prov = sf::st_read("data-raw/CanadaCensusShapes/gpr_000e11a_e.shp",quiet=TRUE)
 plot(sf::st_geometry(can_prov))
 ```
@@ -100,7 +100,7 @@ usethis::use_data(can_prov,overwrite=TRUE)
 usethis::use_r("can_prov")
 ```
 
-```{r}
+```{r can_cendat}
 can_cendat = read.csv("data-raw/CanadaCensusData/CanadaCensusData.csv")
 
 can_cendat = can_cendat[,c(
@@ -256,7 +256,7 @@ raster::writeRaster(x = ontario_lc_90m,
 ),overwrite=TRUE)
 ```
 
-```{r}
+```{r ontario_lc}
 ontario_lc = raster::raster(file.path(
   "data-raw","canada_2015_land_cover",
   "landcover_SouthernOntario.tif"
