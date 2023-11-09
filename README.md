@@ -41,7 +41,7 @@ library(dfsspatdat)
 ### World Cities Data
 
 Made with Natural Earth. Free vector and raster map data @
-naturalearthdata.com.
+[naturalearthdata.com](https://www.naturalearthdata.com/).
 
 ![](https://www.naturalearthdata.com/wp-content/uploads/2009/08/NEV-Logo-color_sm.png)
 
