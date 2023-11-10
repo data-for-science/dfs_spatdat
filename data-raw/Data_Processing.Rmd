@@ -43,6 +43,10 @@ worldcities = worldcities[,c(
 plot(sf::st_geometry(worldcities))
 ```
 
+```{r}
+sf::st_write(worldcities,"data-shp/worldcities.shp",append=FALSE)
+```
+
 ```{r, eval=FALSE}
 usethis::use_data(worldcities,overwrite=TRUE)
 usethis::use_r("worldcities")
@@ -265,7 +269,6 @@ ontario_lc = raster::raster(file.path(
 raster::plot(ontario_lc)
 ```
 
-
 ```{r, eval=FALSE}
 usethis::use_data(ontario_lc,overwrite=TRUE)
 usethis::use_r("ontario_lc")
@@ -328,6 +331,11 @@ easblu_on = raster::raster("data-raw/EBirdData/easblu_occur_year_Ontario.grd")
 raster::plot(easblu_on,main = "Eastern Bluebird Frequency in Ontario")
 ```
 
+```{r}
+raster::writeRaster(easblu_on,"data-shp/easblu_on.grd",overwrite=TRUE)
+```
+
+
 ```{r, eval=FALSE}
 usethis::use_data(easblu_on,overwrite=TRUE)
 usethis::use_r("easblu_on")
@@ -336,6 +344,10 @@ usethis::use_r("easblu_on")
 ```{r bobolink}
 boboli_on = raster::raster("data-raw/EBirdData/boboli_occur_year_Ontario.grd")
 raster::plot(boboli_on,main = "Bobolink Frequency in Ontario")
+```
+
+```{r}
+raster::writeRaster(boboli_on,"data-shp/boboli_on.grd",overwrite=TRUE)
 ```
 
 ```{r, eval=FALSE}

@@ -44,6 +44,20 @@ plot(sf::st_geometry(worldcities))
 ![](Data_Processing_files/figure-gfm/worldcities-1.png)<!-- -->
 
 ``` r
+sf::st_write(worldcities,"data-shp/worldcities.shp",append=FALSE)
+```
+
+    ## Deleting layer `worldcities' using driver `ESRI Shapefile'
+    ## Writing layer `worldcities' to data source 
+    ##   `data-shp/worldcities.shp' using driver `ESRI Shapefile'
+    ## Writing 7342 features with 14 fields and geometry type Point.
+
+    ## Warning in CPL_write_ogr(obj, dsn, layer, driver,
+    ## as.character(dataset_options), : GDAL Message 1: One or several characters
+    ## couldn't be converted correctly from UTF-8 to ISO-8859-1.  This warning will
+    ## not be emitted anymore.
+
+``` r
 usethis::use_data(worldcities,overwrite=TRUE)
 usethis::use_r("worldcities")
 ```
@@ -356,6 +370,10 @@ raster::plot(easblu_on,main = "Eastern Bluebird Frequency in Ontario")
 ![](Data_Processing_files/figure-gfm/easternbluebird-1.png)<!-- -->
 
 ``` r
+raster::writeRaster(easblu_on,"data-shp/easblu_on.grd",overwrite=TRUE)
+```
+
+``` r
 usethis::use_data(easblu_on,overwrite=TRUE)
 usethis::use_r("easblu_on")
 ```
@@ -366,6 +384,10 @@ raster::plot(boboli_on,main = "Bobolink Frequency in Ontario")
 ```
 
 ![](Data_Processing_files/figure-gfm/bobolink-1.png)<!-- -->
+
+``` r
+raster::writeRaster(boboli_on,"data-shp/boboli_on.grd",overwrite=TRUE)
+```
 
 ``` r
 usethis::use_data(boboli_on,overwrite=TRUE)
