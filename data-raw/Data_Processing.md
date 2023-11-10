@@ -284,16 +284,7 @@ ontario_lc = raster::raster(file.path(
   "data-raw","canada_2015_land_cover",
   "landcover_SouthernOntario.tif"
 ))
-```
 
-    ## The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-    ## which was just loaded, were retired in October 2023.
-    ## Please refer to R-spatial evolution reports for details, especially
-    ## https://r-spatial.org/r/2023/05/15/evolution4.html.
-    ## It may be desirable to make the sf package available;
-    ## package maintainers should consider adding sf to Suggests:.
-
-``` r
 raster::plot(ontario_lc)
 ```
 
@@ -302,6 +293,83 @@ raster::plot(ontario_lc)
 ``` r
 usethis::use_data(ontario_lc,overwrite=TRUE)
 usethis::use_r("ontario_lc")
+```
+
+## EBird Status and Trends
+
+The eBird project has multiple data products that can be used for
+academic research or hobby science.
+
+<https://science.ebird.org/en>
+
+The Status and Trends data are processed data products with time series
+and rasterized formats. <https://science.ebird.org/en/status-and-trends>
+
+You need an access key to access eBird data:
+<https://science.ebird.org/en/status-and-trends/download-data>
+
+``` r
+set_ebirdst_access_key()
+```
+
+The “ebirdst” package interfaces with the eBird API to download data
+directly to your computer and load into R.
+<https://cornelllabofornithology.github.io/ebirdst/index.html>
+
+``` r
+#?ebirdst
+
+# where ebirdst will store data
+path = ebirdst_data_dir()
+path = "C:/Users/Tyler/AppData/Roaming/R/data/R/ebirdst"
+```
+
+``` r
+# Eastern Bluebird
+ebirdst_download(species = "easblu",tifs_only=TRUE,show_progress = FALSE)
+# Bobolink
+ebirdst_download(species = "boboli",tifs_only=TRUE,show_progress = FALSE)
+```
+
+``` r
+blue = load_raster(path=file.path(path,"2020/easblu"),product="occurrence",period="full-year",resolution = "hr")
+bobo = load_raster(path=file.path(path,"2020/boboli"),product="occurrence",period="full-year",resolution = "hr")
+
+clip = st_transform(Ontario,st_crs(blue)$proj4string)
+
+blue_clip=raster::crop(blue,clip)
+blue_clip = blue_clip %>% projectRaster(crs=Proj_AEA_Can)
+blue_clip=raster::mask(blue_clip,Ontario)
+writeRaster(blue_clip,filename = "data-raw/EBirdData/easblu_occur_year_Ontario",overwrite=TRUE)
+
+bobo_clip=raster::crop(bobo,clip)
+bobo_clip = bobo_clip %>% projectRaster(crs=Proj_AEA_Can)
+bobo_clip=raster::mask(bobo_clip,Ontario)
+writeRaster(bobo_clip,filename = "data-raw/EBirdData/boboli_occur_year_Ontario",overwrite=TRUE)
+```
+
+``` r
+easblu_on = raster::raster("data-raw/EBirdData/easblu_occur_year_Ontario.grd")
+raster::plot(easblu_on,main = "Eastern Bluebird Frequency in Ontario")
+```
+
+![](Data_Processing_files/figure-gfm/easternbluebird-1.png)<!-- -->
+
+``` r
+usethis::use_data(easblu_on,overwrite=TRUE)
+usethis::use_r("easblu_on")
+```
+
+``` r
+boboli_on = raster::raster("data-raw/EBirdData/boboli_occur_year_Ontario.grd")
+raster::plot(boboli_on,main = "Bobolink Frequency in Ontario")
+```
+
+![](Data_Processing_files/figure-gfm/bobolink-1.png)<!-- -->
+
+``` r
+usethis::use_data(boboli_on,overwrite=TRUE)
+usethis::use_r("boboli_on")
 ```
 
 ## Canadian Aboveground Biomass
