@@ -337,7 +337,7 @@ raster::plot(easblu_on,main = "Eastern Bluebird Frequency in Ontario")
 ```
 
 ```{r}
-raster::writeRaster(easblu_on,"data-shp/easblu_on.grd",overwrite=TRUE)
+raster::writeRaster(easblu_on,"inst/data-shp/easblu_on.grd",overwrite=TRUE)
 ```
 
 
@@ -352,7 +352,7 @@ raster::plot(boboli_on,main = "Bobolink Frequency in Ontario")
 ```
 
 ```{r}
-raster::writeRaster(boboli_on,"data-shp/boboli_on.grd",overwrite=TRUE)
+raster::writeRaster(boboli_on,"inst/data-shp/boboli_on.grd",overwrite=TRUE)
 ```
 
 ```{r, eval=FALSE}
