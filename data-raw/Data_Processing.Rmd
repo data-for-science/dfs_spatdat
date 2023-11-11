@@ -95,7 +95,12 @@ usethis::use_r("can_cdiv")
 
 
 ```{r can_prov}
+library(sf)
 can_prov = sf::st_read("data-raw/CanadaCensusShapes/gpr_000e11a_e.shp",quiet=TRUE)
+sf::st_is_valid(can_prov)
+
+can_prov = sf::st_make_valid(can_prov)
+
 plot(sf::st_geometry(can_prov))
 ```
 
