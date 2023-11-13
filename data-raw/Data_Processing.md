@@ -47,16 +47,6 @@ plot(sf::st_geometry(worldcities))
 sf::st_write(worldcities,"data-shp/worldcities.shp",append=FALSE)
 ```
 
-    ## Deleting layer `worldcities' using driver `ESRI Shapefile'
-    ## Writing layer `worldcities' to data source 
-    ##   `data-shp/worldcities.shp' using driver `ESRI Shapefile'
-    ## Writing 7342 features with 14 fields and geometry type Point.
-
-    ## Warning in CPL_write_ogr(obj, dsn, layer, driver,
-    ## as.character(dataset_options), : GDAL Message 1: One or several characters
-    ## couldn't be converted correctly from UTF-8 to ISO-8859-1.  This warning will
-    ## not be emitted anymore.
-
 ``` r
 usethis::use_data(worldcities,overwrite=TRUE)
 usethis::use_r("worldcities")
@@ -94,6 +84,19 @@ utils::download.file(
 
 ``` r
 can_cdiv = sf::st_read("data-raw/CanadaCensusShapes/gcd_000e11a_e.shp",quiet=TRUE)
+sum(!sf::st_is_valid(can_cdiv))
+```
+
+    ## [1] 1
+
+``` r
+can_cdiv = sf::st_make_valid(can_cdiv)
+sum(!sf::st_is_valid(can_cdiv))
+```
+
+    ## [1] 0
+
+``` r
 plot(sf::st_geometry(can_cdiv))
 ```
 
@@ -105,7 +108,26 @@ usethis::use_r("can_cdiv")
 ```
 
 ``` r
+library(sf)
+```
+
+    ## Linking to GEOS 3.11.2, GDAL 3.7.2, PROJ 9.3.0; sf_use_s2() is TRUE
+
+``` r
 can_prov = sf::st_read("data-raw/CanadaCensusShapes/gpr_000e11a_e.shp",quiet=TRUE)
+sum(!sf::st_is_valid(can_prov))
+```
+
+    ## [1] 1
+
+``` r
+can_prov = sf::st_make_valid(can_prov)
+sum(!sf::st_is_valid(can_prov))
+```
+
+    ## [1] 0
+
+``` r
 plot(sf::st_geometry(can_prov))
 ```
 
@@ -141,7 +163,7 @@ names(can_cendat) = c(
   "CDUID",
   "CDNAME",
   "CDTYPE",
-  "PRNAME",
+  "PRENAME",
   "PRUID",
   "pop.16",
   "pop.11",
@@ -190,7 +212,7 @@ can_cendat$CDTYPE = factor(can_cendat$CDTYPE,
 head(can_cendat)
 ```
 
-    ##   CDUID          CDNAME          CDTYPE                    PRNAME PRUID pop.16
+    ##   CDUID          CDNAME          CDTYPE                   PRENAME PRUID pop.16
     ## 1  1001 Division No.  1 Census division Newfoundland and Labrador    10 270348
     ## 2  1002 Division No.  2 Census division Newfoundland and Labrador    10  20372
     ## 3  1003 Division No.  3 Census division Newfoundland and Labrador    10  15560
@@ -215,6 +237,39 @@ head(can_cendat)
 ``` r
 usethis::use_data(can_cendat,overwrite=TRUE)
 usethis::use_r("can_cendat")
+```
+
+``` r
+library(sf)
+can_prov = sf::st_read("data-raw/CanadaCensusShapes/gpr_000e11a_e.shp",quiet=TRUE)
+sum(!sf::st_is_valid(can_prov))
+```
+
+    ## [1] 1
+
+``` r
+can_prov = sf::st_make_valid(can_prov)
+sum(!sf::st_is_valid(can_prov))
+```
+
+    ## [1] 0
+
+``` r
+can_shp = sf::st_union(can_prov)
+can_shp = sf::st_simplify(can_shp,preserveTopology = TRUE,dTolerance = 200)
+
+can_shp = st_sf(can_shp)
+names(can_shp) = "geometry"
+st_geometry(can_shp) <- "geometry"
+
+plot(sf::st_geometry(can_shp))
+```
+
+![](Data_Processing_files/figure-gfm/can_shp-1.png)<!-- -->
+
+``` r
+usethis::use_data(can_shp,overwrite=TRUE)
+usethis::use_r("can_shp")
 ```
 
 ## Ontario Land Cover
@@ -370,7 +425,7 @@ raster::plot(easblu_on,main = "Eastern Bluebird Frequency in Ontario")
 ![](Data_Processing_files/figure-gfm/easternbluebird-1.png)<!-- -->
 
 ``` r
-raster::writeRaster(easblu_on,"data-shp/easblu_on.grd",overwrite=TRUE)
+raster::writeRaster(easblu_on,"inst/data-shp/easblu_on.grd",overwrite=TRUE)
 ```
 
 ``` r
@@ -386,7 +441,7 @@ raster::plot(boboli_on,main = "Bobolink Frequency in Ontario")
 ![](Data_Processing_files/figure-gfm/bobolink-1.png)<!-- -->
 
 ``` r
-raster::writeRaster(boboli_on,"data-shp/boboli_on.grd",overwrite=TRUE)
+raster::writeRaster(boboli_on,"inst/data-shp/boboli_on.grd",overwrite=TRUE)
 ```
 
 ``` r
